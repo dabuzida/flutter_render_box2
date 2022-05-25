@@ -11,16 +11,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RenderBox',
+      title: 'RenderBox2',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('RenderBox'),
+          title: const Text('RenderBox2'),
           elevation: 0,
           foregroundColor: Colors.cyanAccent,
           backgroundColor: Colors.black,
           centerTitle: true,
         ),
-        backgroundColor: Colors.greenAccent[100],
+        // backgroundColor: Colors.greenAccent[100],
         body: HomeScreen(),
         // body: AAA(),
       ),
@@ -38,9 +38,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? ownName;
-  String? bogunsoName;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   int _id = 0;
   bool _leftTap = true;
@@ -50,11 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late Color _menuTapBgColor; // background
   late Color _menuTapBdColor; // border
   late double _mainContentHeight;
-
-  final double _blankRow1 = 1;
-  final double _blankRow10 = 10;
-  final double _blankRow14 = 14;
-  final double _blankRow15 = 15;
 
   final Color _tapPhraseColor = Color.fromARGB(255, 0, 71, 255);
 
@@ -66,10 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print('initState');
     super.initState();
     _changeMenuTap(state: 'normal'); // normal, hover, active
-    _mainContentHeight = 1000;
+    _mainContentHeight = 1500;
   }
 
   final List _tapItems = [
@@ -78,8 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
       'title': '고객 추가',
       'desc': '알츠윈 서비스를 받으실 고객을 추가하는 과정입니다',
       'img': [
-        'how_to_use_manager_1_1.png',
-        'how_to_use_manager_1_2.png',
+        'dev01.jpg',
+        'dev02.jpg',
       ],
     },
     {
@@ -87,9 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
       'title': '새 캠페인',
       'desc': '진행될 알츠윈 서비스의 고객과 일정을 설정합니다',
       'img': [
-        'how_to_use_manager_2_1.png',
-        'how_to_use_manager_2_2.png',
-        'how_to_use_manager_2_3.png',
+        'dev03.jpg',
+        'dev04.jpg',
+        'dev05.jpg',
       ],
     },
     {
@@ -97,31 +89,30 @@ class _HomeScreenState extends State<HomeScreen> {
       'title': '알츠윈 콜',
       'desc': '고객에게 알츠윈 서비스 검사를 진행합니다',
       'img': [
-        'how_to_use_manager_3_1.png',
-        'how_to_use_manager_3_2.png',
+        'dev06.jpg',
+        'dev07.jpg',
       ],
     },
   ];
 
   final _menuTap = {
     'normal': {
-      'txColor': Color(0xFF0047FF),
-      'bgColor': Color.fromARGB(255, 182, 25, 25),
-      'bdColor': Color.fromARGB(255, 22, 167, 22),
+      'txColor': const Color(0xFF0047FF),
+      'bgColor': const Color.fromARGB(255, 182, 25, 25),
+      'bdColor': const Color.fromARGB(255, 22, 167, 22),
     },
     'hover': {
-      'txColor': Color.fromARGB(255, 204, 31, 118),
-      'bgColor': Color.fromARGB(255, 14, 137, 146),
-      'bdColor': Color.fromARGB(255, 25, 25, 26),
+      'txColor': const Color.fromARGB(255, 204, 31, 118),
+      'bgColor': const Color.fromARGB(255, 14, 137, 146),
+      'bdColor': const Color.fromARGB(255, 25, 25, 26),
     },
     'active': {
-      'txColor': Color(0xFFFFFFFF),
-      'bgColor': Color.fromARGB(255, 25, 139, 35),
-      'bdColor': Color.fromARGB(255, 153, 29, 29),
+      'txColor': const Color(0xFFFFFFFF),
+      'bgColor': const Color.fromARGB(255, 25, 139, 35),
+      'bdColor': const Color.fromARGB(255, 153, 29, 29),
     },
   };
   double _getWidgetHeight() {
-    print('_getWidgetHeight');
     final RenderBox renderBox = _widgetKey.currentContext?.findRenderObject() as RenderBox;
 
     final Size size = renderBox.size;
@@ -131,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _setVisibleTap({required int setTapId, required bool leftTap, required bool centerTap, required bool rightTap}) {
-    print('_setVisibleTap');
     _id = setTapId;
     _leftTap = leftTap;
     _centerTap = centerTap;
@@ -139,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _changeMenuTap({required String state}) {
-    print('_changeMenuTap');
     // 메뉴버튼 평상시normal, 호버시hover, 클릭시active
     _menuTapTxColor = _menuTap[state]!['txColor']!;
     _menuTapBgColor = _menuTap[state]!['bgColor']!;
@@ -147,36 +136,33 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onTapped({required int index}) {
-    print('_onTapped');
     setState(() {
       if (index == 0) {
-        _mainContentHeight = _getWidgetHeight();
+        // _mainContentHeight = _getWidgetHeight();
         _setVisibleTap(setTapId: index, leftTap: true, centerTap: false, rightTap: false);
         _changeMenuTap(state: 'normal');
       } else if (index == 1) {
-        _mainContentHeight = _getWidgetHeight();
+        // _mainContentHeight = _getWidgetHeight();
         _setVisibleTap(setTapId: index, leftTap: false, centerTap: true, rightTap: false);
         _changeMenuTap(state: 'normal');
       } else if (index == 2) {
-        _mainContentHeight = _getWidgetHeight();
+        // _mainContentHeight = _getWidgetHeight();
         _setVisibleTap(setTapId: index, leftTap: false, centerTap: false, rightTap: true);
         _changeMenuTap(state: 'normal');
       } else if (index == 3) {
-        _mainContentHeight = _getWidgetHeight();
+        // _mainContentHeight = _getWidgetHeight();
         _setVisibleTap(setTapId: index, leftTap: false, centerTap: false, rightTap: false);
       }
     });
   }
 
   void _enterMenuTap(PointerEvent details) {
-    print('_enterMenuTap');
     setState(() {
       _changeMenuTap(state: 'hover');
     });
   }
 
   void _exitMenuTap(PointerEvent details) {
-    print('_exitMenuTap');
     setState(() {
       if (0 <= _id && _id <= 2) {
         _changeMenuTap(state: 'normal');
@@ -188,7 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return ListView(
       controller: _scrollController,
       children: [
@@ -205,19 +190,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildUIGuide() {
-    print('buildUIGuide');
     return Container(
       width: 1700,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.amber, width: 2),
       ),
-      margin: EdgeInsets.only(bottom: 100),
-      padding: EdgeInsets.symmetric(horizontal: 50),
+      margin: const EdgeInsets.only(bottom: 100),
+      padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // TextXL(text: '알츠윈 관리자 사용 순서', color: Preset.colorDarkFont.value, fontWeight: FontWeight.w500),
-          Text('알츠윈 관리자 사용 순서'),
+          const Text('알츠윈 관리자 사용 순서'),
           // const BlankColSM(),
           Container(
             width: double.infinity,
@@ -235,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   top: 0,
                   right: 0,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         // border: Border.all(color: Colors.red, width: 1),
                         ),
                     height: 61,
@@ -248,10 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: <Widget>[
                               Expanded(child: _lowerTap(id: 0)),
                               // const SizedBox(width: 10),
-                              SizedBox(width: _blankRow10),
+                              const SizedBox(width: 10),
                               Expanded(child: _lowerTap(id: 1)),
                               // const SizedBox(width: 10),
-                              SizedBox(width: _blankRow10),
+                              const SizedBox(width: 10),
                               Expanded(child: _lowerTap(id: 2)),
                             ],
                           ),
@@ -277,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onEnter: _enterMenuTap,
                           onExit: _exitMenuTap,
                           child: GestureDetector(
-                            onTap: () => _onTapped(index: 3), // 0~2: 왼쪽 3개탭, 3: 오른쪽 메뉴 소개 탭
+                            // onTap: () => _onTapped(index: 3), // 0~2: 왼쪽 3개탭, 3: 오른쪽 메뉴 소개 탭
                             child: Container(
                               height: 40,
                               decoration: BoxDecoration(
@@ -289,12 +273,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // width: double.infinity,
                                 height: 16,
                                 alignment: Alignment.center,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   // border: Border.all(color: Colors.red, width: 1),
-                                  borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+                                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                 ),
                                 child: FittedBox(
-                                  child: Text('메뉴 소개'),
+                                  child: Text('메뉴 소개', style: TextStyle(color: _menuTapTxColor)),
                                   // child: TextM(text: '메뉴 소개', color: _menuTapTxColor, fontWeight: FontWeight.w500),
                                 ),
                               ),
@@ -315,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       color: _activeColor,
                       border: Border.all(color: _borderColor, width: 1),
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(5),
                         bottomLeft: Radius.circular(5),
                         bottomRight: Radius.circular(5),
@@ -336,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           children: <Widget>[
                             // const SizedBox(width: 1),
-                            SizedBox(width: _blankRow1),
+                            const SizedBox(width: 1),
                             Expanded(
                               child: _upperTap(id: 0, visible: _leftTap),
                             ),
@@ -351,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: _upperTap(id: 2, visible: _rightTap),
                             ),
                             // const SizedBox(width: 1),
-                            SizedBox(width: _blankRow1),
+                            const SizedBox(width: 1),
                           ],
                         ),
                       ),
@@ -368,19 +352,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMainContent({required int id}) {
-    print('_buildMainContent');
     List<Widget> widgets = [];
     // widgets.add(const BlankColL());
     widgets.add(SizedBox(height: 25, child: Text(_tapItems[id]['desc'])));
     // widgets.add(const BlankColML());
     for (int i = 0; i < _tapItems[id]['img'].length; i++) {
-      widgets.add(Image.asset('images/${_tapItems[id]['img'][i]}'));
+      widgets.add(Image.asset('${_tapItems[id]['img'][i]}'));
       // widgets.add(const BlankColM());
     }
     return Container(
       key: _widgetKey,
-      padding: EdgeInsets.symmetric(horizontal: 50),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.symmetric(horizontal: 50),
+      decoration: const BoxDecoration(
           // border: Border.all(color: Colors.red, width: 1),
           ),
       child: Column(
@@ -391,7 +374,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _lowerTap({required int id}) {
-    print('_lowerTap');
     return Container(
       // width: 130,
       height: 61,
@@ -399,16 +381,16 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: _inactiveColor,
         border: Border.all(color: _borderColor, width: 1),
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(5),
           topRight: Radius.circular(5),
         ),
       ),
       child: Row(
         children: <Widget>[
-          Expanded(
+          const Expanded(
             flex: 15,
-            child: SizedBox(width: _blankRow15),
+            child: SizedBox(width: 15),
           ),
           Expanded(
             flex: 115,
@@ -443,7 +425,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _upperTap({required int id, required bool visible}) {
-    print('_upperTap');
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -459,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(top: 10, right: 15, bottom: 10),
             decoration: BoxDecoration(
               color: _activeColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(5),
                 topRight: Radius.circular(5),
               ),
