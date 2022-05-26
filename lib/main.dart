@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+void showLayoutGuidelines() {
+  debugPaintSizeEnabled = true;
+}
+
 void main() {
+  // showLayoutGuidelines();
   runApp(const MyApp());
 }
 
@@ -20,7 +25,6 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.black,
           centerTitle: true,
         ),
-        // backgroundColor: Colors.greenAccent[100],
         body: HomeScreen(),
         // body: AAA(),
       ),
@@ -40,29 +44,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
 
-  int _id = 0;
-  bool _leftTap = true;
-  bool _centerTap = false;
-  bool _rightTap = false;
+  late int _id;
+  late bool _leftTap;
+  late bool _centerTap;
+  late bool _rightTap;
   late Color _menuTapTxColor; // text
   late Color _menuTapBgColor; // background
   late Color _menuTapBdColor; // border
-  late double _mainContentHeight;
+  // double _mainContentHeight = 1000;
 
   final Color _tapPhraseColor = Color.fromARGB(255, 0, 71, 255);
 
   final Color _activeColor = const Color.fromARGB(255, 243, 245, 247);
   final Color _inactiveColor = const Color.fromARGB(255, 255, 255, 255);
   final Color _borderColor = const Color.fromARGB(255, 220, 226, 228);
-
-  final GlobalKey _widgetKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-    _changeMenuTap(state: 'normal'); // normal, hover, active
-    _mainContentHeight = 1500;
-  }
 
   final List _tapItems = [
     {
@@ -95,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  final _menuTap = {
+  final _menuTapDeco = {
     'normal': {
       'txColor': const Color(0xFF0047FF),
       'bgColor': const Color.fromARGB(255, 182, 25, 25),
@@ -112,17 +107,16 @@ class _HomeScreenState extends State<HomeScreen> {
       'bdColor': const Color.fromARGB(255, 153, 29, 29),
     },
   };
-  double _getWidgetHeight() {
-    final RenderBox renderBox = _widgetKey.currentContext?.findRenderObject() as RenderBox;
 
-    final Size size = renderBox.size;
-    // print(size.width);
-    print('위젯의 높이: ${size.height}');
-    return size.height;
+  @override
+  void initState() {
+    super.initState();
+    _setVisibleTap(id: 0, leftTap: true, centerTap: false, rightTap: false);
+    _changeMenuTap(state: 'normal'); // normal, hover, active
   }
 
-  void _setVisibleTap({required int setTapId, required bool leftTap, required bool centerTap, required bool rightTap}) {
-    _id = setTapId;
+  void _setVisibleTap({required int id, required bool leftTap, required bool centerTap, required bool rightTap}) {
+    _id = id;
     _leftTap = leftTap;
     _centerTap = centerTap;
     _rightTap = rightTap;
@@ -130,28 +124,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _changeMenuTap({required String state}) {
     // 메뉴버튼 평상시normal, 호버시hover, 클릭시active
-    _menuTapTxColor = _menuTap[state]!['txColor']!;
-    _menuTapBgColor = _menuTap[state]!['bgColor']!;
-    _menuTapBdColor = _menuTap[state]!['bdColor']!;
+    _menuTapTxColor = _menuTapDeco[state]!['txColor']!;
+    _menuTapBgColor = _menuTapDeco[state]!['bgColor']!;
+    _menuTapBdColor = _menuTapDeco[state]!['bdColor']!;
   }
 
   void _onTapped({required int index}) {
     setState(() {
       if (index == 0) {
-        // _mainContentHeight = _getWidgetHeight();
-        _setVisibleTap(setTapId: index, leftTap: true, centerTap: false, rightTap: false);
+        _setVisibleTap(id: index, leftTap: true, centerTap: false, rightTap: false);
         _changeMenuTap(state: 'normal');
       } else if (index == 1) {
-        // _mainContentHeight = _getWidgetHeight();
-        _setVisibleTap(setTapId: index, leftTap: false, centerTap: true, rightTap: false);
+        _setVisibleTap(id: index, leftTap: false, centerTap: true, rightTap: false);
         _changeMenuTap(state: 'normal');
       } else if (index == 2) {
-        // _mainContentHeight = _getWidgetHeight();
-        _setVisibleTap(setTapId: index, leftTap: false, centerTap: false, rightTap: true);
+        _setVisibleTap(id: index, leftTap: false, centerTap: false, rightTap: true);
         _changeMenuTap(state: 'normal');
       } else if (index == 3) {
-        // _mainContentHeight = _getWidgetHeight();
-        _setVisibleTap(setTapId: index, leftTap: false, centerTap: false, rightTap: false);
+        _setVisibleTap(id: index, leftTap: false, centerTap: false, rightTap: false);
       }
     });
   }
@@ -195,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         border: Border.all(color: Colors.amber, width: 2),
       ),
-      margin: const EdgeInsets.only(bottom: 100),
+      margin: const EdgeInsets.only(bottom: 50),
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,143 +195,139 @@ class _HomeScreenState extends State<HomeScreen> {
           // const BlankColSM(),
           Container(
             width: double.infinity,
-            // height: _mainContentHeight,
-            height: MediaQuery.of(context).size.height,
+            // height: MediaQuery.of(context).size.height,
             // height: 2000, // renderBox, key 로 구한 값으로 변경시킬 값
             decoration: BoxDecoration(
               border: Border.all(color: Colors.purple, width: 2),
             ),
             child: Stack(
               children: <Widget>[
-                Positioned(
+                Column(
                   // 배경 탭 3개
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        // border: Border.all(color: Colors.red, width: 1),
+                  children: <Widget>[
+                    Container(
+                      decoration: const BoxDecoration(
+                          // border: Border.all(color: Colors.red, width: 1),
+                          ),
+                      height: 61,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(child: _lowerTap(id: 0)),
+                                // const SizedBox(width: 10),
+                                const SizedBox(width: 10),
+                                Expanded(child: _lowerTap(id: 1)),
+                                // const SizedBox(width: 10),
+                                const SizedBox(width: 10),
+                                Expanded(child: _lowerTap(id: 2)),
+                              ],
+                            ),
+                          ),
+                          const Expanded(flex: 1, child: SizedBox()),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  // 메뉴 소개 탭
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        const Expanded(flex: 667, child: SizedBox()),
+                        Expanded(
+                          flex: 130,
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: _enterMenuTap,
+                            onExit: _exitMenuTap,
+                            child: GestureDetector(
+                              // onTap: () => _onTapped(index: 3), // 0~2: 왼쪽 3개탭, 3: 오른쪽 메뉴 소개 탭
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: _menuTapBgColor,
+                                  border: Border.all(color: _menuTapBdColor, width: 1),
+                                  borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+                                ),
+                                child: Container(
+                                  // width: double.infinity,
+                                  height: 16,
+                                  alignment: Alignment.center,
+                                  decoration: const BoxDecoration(
+                                    // border: Border.all(color: Colors.red, width: 1),
+                                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                  ),
+                                  child: FittedBox(
+                                    child: Text('메뉴 소개', style: TextStyle(color: _menuTapTxColor)),
+                                    // child: TextM(text: '메뉴 소개', color: _menuTapTxColor, fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                    height: 61,
-                    // color: Colors.blueGrey[100],
-                    child: Row(
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  // 본문
+                  children: <Widget>[
+                    const SizedBox(height: 60),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: _activeColor,
+                        border: Border.all(color: _borderColor, width: 1),
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(5),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5),
+                        ),
+                      ),
+                      child: _buildMainContent(id: _id),
+                    ),
+                  ],
+                ),
+                Column(
+                  // 선택된 탭 3개
+                  children: [
+                    const SizedBox(height: 1),
+                    Row(
                       children: <Widget>[
                         Expanded(
                           flex: 1,
                           child: Row(
                             children: <Widget>[
-                              Expanded(child: _lowerTap(id: 0)),
-                              // const SizedBox(width: 10),
-                              const SizedBox(width: 10),
-                              Expanded(child: _lowerTap(id: 1)),
-                              // const SizedBox(width: 10),
-                              const SizedBox(width: 10),
-                              Expanded(child: _lowerTap(id: 2)),
+                              // const SizedBox(width: 1),
+                              const SizedBox(width: 1),
+                              Expanded(
+                                child: _upperTap(id: 0, visible: _leftTap),
+                              ),
+                              const SizedBox(width: 12),
+                              // const BlankRowSM(),
+                              Expanded(
+                                child: _upperTap(id: 1, visible: _centerTap),
+                              ),
+                              const SizedBox(width: 12),
+                              // const BlankRowSM(),
+                              Expanded(
+                                child: _upperTap(id: 2, visible: _rightTap),
+                              ),
+                              // const SizedBox(width: 1),
+                              const SizedBox(width: 1),
                             ],
                           ),
                         ),
                         const Expanded(flex: 1, child: SizedBox()),
                       ],
                     ),
-                  ),
-                ),
-                Positioned(
-                  // 메뉴 소개 탭
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      const Expanded(flex: 667, child: SizedBox()),
-                      Expanded(
-                        flex: 130,
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          onEnter: _enterMenuTap,
-                          onExit: _exitMenuTap,
-                          child: GestureDetector(
-                            // onTap: () => _onTapped(index: 3), // 0~2: 왼쪽 3개탭, 3: 오른쪽 메뉴 소개 탭
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: _menuTapBgColor,
-                                border: Border.all(color: _menuTapBdColor, width: 1),
-                                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-                              ),
-                              child: Container(
-                                // width: double.infinity,
-                                height: 16,
-                                alignment: Alignment.center,
-                                decoration: const BoxDecoration(
-                                  // border: Border.all(color: Colors.red, width: 1),
-                                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                ),
-                                child: FittedBox(
-                                  child: Text('메뉴 소개', style: TextStyle(color: _menuTapTxColor)),
-                                  // child: TextM(text: '메뉴 소개', color: _menuTapTxColor, fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  // 본문
-                  left: 0,
-                  top: 60,
-                  right: 0,
-                  child: Container(
-                    // key: _widgetKey,
-                    decoration: BoxDecoration(
-                      color: _activeColor,
-                      border: Border.all(color: _borderColor, width: 1),
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(5),
-                        bottomLeft: Radius.circular(5),
-                        bottomRight: Radius.circular(5),
-                      ),
-                    ),
-                    child: _buildMainContent(id: _id),
-                  ),
-                ),
-                Positioned(
-                  // 선택된 탭 3개
-                  left: 0,
-                  top: 1,
-                  right: 0,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Row(
-                          children: <Widget>[
-                            // const SizedBox(width: 1),
-                            const SizedBox(width: 1),
-                            Expanded(
-                              child: _upperTap(id: 0, visible: _leftTap),
-                            ),
-                            // const SizedBox(width: 12),
-                            // const BlankRowSM(),
-                            Expanded(
-                              child: _upperTap(id: 1, visible: _centerTap),
-                            ),
-                            // const SizedBox(width: 12),
-                            // const BlankRowSM(),
-                            Expanded(
-                              child: _upperTap(id: 2, visible: _rightTap),
-                            ),
-                            // const SizedBox(width: 1),
-                            const SizedBox(width: 1),
-                          ],
-                        ),
-                      ),
-                      const Expanded(flex: 1, child: SizedBox()),
-                    ],
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -361,7 +347,8 @@ class _HomeScreenState extends State<HomeScreen> {
       // widgets.add(const BlankColM());
     }
     return Container(
-      key: _widgetKey,
+      // key: _widgetKey2,
+      // key: _widgetKey,
       padding: const EdgeInsets.symmetric(horizontal: 50),
       decoration: const BoxDecoration(
           // border: Border.all(color: Colors.red, width: 1),
